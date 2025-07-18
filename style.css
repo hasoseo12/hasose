@@ -1,0 +1,554 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.game-container {
+    width: 100%;
+    max-width: 1200px;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.hud {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+}
+
+.game-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ff6b6b;
+    text-align: center;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.score, .ammo {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.weapon-selector {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.weapon-btn {
+    padding: 8px 12px;
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s;
+}
+
+.weapon-btn:hover {
+    background: #666;
+}
+
+.weapon-btn.active {
+    background: #ff6b6b;
+    box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+.game-area {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: crosshair;
+}
+
+.target {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+    overflow: hidden;
+    animation: targetMove 2s ease-in-out infinite;
+}
+
+.target-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.target:hover {
+    transform: scale(1.05);
+}
+
+.target-rings {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid;
+}
+
+.ring-1 {
+    width: 80%;
+    height: 80%;
+    border-color: #ff6b6b;
+    top: 10%;
+    left: 10%;
+}
+
+.ring-2 {
+    width: 60%;
+    height: 60%;
+    border-color: #4ecdc4;
+    top: 20%;
+    left: 20%;
+}
+
+.ring-3 {
+    width: 40%;
+    height: 40%;
+    border-color: #45b7d1;
+    top: 30%;
+    left: 30%;
+}
+
+.ring-4 {
+    width: 20%;
+    height: 20%;
+    border-color: #96ceb4;
+    top: 40%;
+    left: 40%;
+}
+
+
+
+.speech-bubble {
+    position: absolute;
+    top: 50%;
+    right: 50px;
+    transform: translateY(-50%);
+    background: white;
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    min-width: 200px;
+    text-align: center;
+    display: none;
+    border: 3px solid #333;
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid white;
+}
+
+.speech-bubble.show {
+    opacity: 1;
+    transform: translateY(-50%);
+}
+
+.bubble-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    white-space: nowrap;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tears {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+}
+
+.tear {
+    font-size: 20px;
+    animation: tearFall 1s ease-in infinite;
+}
+
+.tear-1 { animation-delay: 0s; }
+.tear-2 { animation-delay: 0.3s; }
+.tear-3 { animation-delay: 0.6s; }
+
+@keyframes tearFall {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(50px) scale(0.5);
+        opacity: 0;
+    }
+}
+
+.controls {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+}
+
+.controls button {
+    padding: 12px 24px;
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.controls button:hover {
+    background: #ff5252;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+}
+
+.hit-marker {
+    position: absolute;
+    color: #ff6b6b;
+    font-size: 24px;
+    font-weight: bold;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s;
+    z-index: 50;
+}
+
+.hit-marker.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.target.hit {
+    animation: targetHit 0.5s ease-out;
+}
+
+@keyframes targetHit {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+
+
+/* 총기별 효과 */
+.weapon-effect {
+    position: absolute;
+    pointer-events: none;
+    z-index: 40;
+}
+
+.pistol-effect {
+    width: 10px;
+    height: 10px;
+    background: #ffeb3b;
+    border-radius: 50%;
+    animation: pistolShot 0.2s ease-out;
+}
+
+.shotgun-effect {
+    width: 30px;
+    height: 30px;
+    background: radial-gradient(circle, #ff9800, #ff5722);
+    border-radius: 50%;
+    animation: shotgunBlast 0.3s ease-out;
+}
+
+.ak-effect {
+    width: 15px;
+    height: 15px;
+    background: #ff5722;
+    border-radius: 50%;
+    animation: akShot 0.15s ease-out;
+}
+
+.sniper-effect {
+    width: 8px;
+    height: 8px;
+    background: #9c27b0;
+    border-radius: 50%;
+    animation: sniperShot 0.1s ease-out;
+}
+
+.bazooka-effect {
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, #ff5722, #d32f2f);
+    border-radius: 50%;
+    animation: bazookaExplosion 0.5s ease-out;
+}
+
+@keyframes pistolShot {
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes shotgunBlast {
+    0% { transform: scale(0); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.8; }
+    100% { transform: scale(3); opacity: 0; }
+}
+
+@keyframes akShot {
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes sniperShot {
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: scale(1.2); opacity: 0; }
+}
+
+@keyframes bazookaExplosion {
+    0% { transform: scale(0); opacity: 1; }
+    50% { transform: scale(2); opacity: 0.8; }
+    100% { transform: scale(4); opacity: 0; }
+}
+
+/* 피 효과 */
+.blood-splatter {
+    position: absolute;
+    pointer-events: none;
+    z-index: 45;
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+.blood-splatter.show {
+    opacity: 1;
+}
+
+.blood-drop {
+    position: absolute;
+    width: 8px;
+    height: 12px;
+    background: radial-gradient(ellipse, #8b0000 0%, #660000 70%, #400000 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: bloodDrop 1s ease-out forwards;
+}
+
+@keyframes bloodDrop {
+    0% {
+        transform: translateY(-20px) scale(0);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(10px) scale(1.2);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(30px) scale(0.8);
+        opacity: 0;
+    }
+}
+
+/* 폭발 효과 */
+.explosion-effect {
+    position: absolute;
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+.explosion-effect.show {
+    opacity: 1;
+}
+
+.explosion-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, #ff6b35, #f7931e);
+    border-radius: 50%;
+    animation: explosionParticle 0.8s ease-out forwards;
+}
+
+@keyframes explosionParticle {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.5) rotate(180deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(0) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* 총알 구멍 효과 */
+.bullet-hole {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle, #000 0%, #333 50%, #666 100%);
+    border-radius: 50%;
+    border: 2px solid #444;
+    animation: bulletHole 0.3s ease-out;
+    z-index: 15;
+}
+
+@keyframes bulletHole {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+}
+
+/* 화면 흔들림 효과 */
+.screen-shake {
+    animation: screenShake 0.3s ease-out;
+}
+
+@keyframes screenShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* 과녁 피 효과 */
+.target.bleeding {
+    animation: targetBleed 0.5s ease-out;
+}
+
+@keyframes targetBleed {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.2) saturate(1.3); }
+    100% { filter: brightness(1); }
+}
+
+/* 총기별 추가 효과 */
+.shotgun-blast {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, rgba(255, 152, 0, 0.8), rgba(255, 87, 34, 0.6));
+    border-radius: 50%;
+    animation: shotgunBlastEffect 0.4s ease-out;
+    z-index: 35;
+}
+
+@keyframes shotgunBlastEffect {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+.bazooka-explosion {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, #ff5722, #d32f2f, #b71c1c);
+    border-radius: 50%;
+    animation: bazookaExplosionEffect 0.6s ease-out;
+    z-index: 40;
+}
+
+@keyframes bazookaExplosionEffect {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(2);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* 과녁 움직임 애니메이션 */
+@keyframes targetMove {
+    0% {
+        transform: translateX(-150px);
+    }
+    25% {
+        transform: translateX(150px);
+    }
+    50% {
+        transform: translateX(150px);
+    }
+    75% {
+        transform: translateX(-150px);
+    }
+    100% {
+        transform: translateX(-150px);
+    }
+}
+
+/* 과녁이 맞았을 때 잠시 멈춤 */
+.target.hit {
+    animation-play-state: paused;
+} 

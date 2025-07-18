@@ -1,0 +1,25 @@
+{
+  "name": "goseonghyeon-target-game",
+  "version": "1.0.0",
+  "description": "고성현 때리기 - 움직이는 과녁 총게임",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000"
+  },
+  "keywords": [
+    "game",
+    "target",
+    "shooting",
+    "html5",
+    "css3",
+    "javascript"
+  ],
+  "author": "Game Developer",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/goseonghyeon-target-game.git"
+  },
+  "homepage": "https://yourusername.github.io/goseonghyeon-target-game"
+} 
